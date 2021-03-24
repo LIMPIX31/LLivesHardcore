@@ -1,0 +1,7 @@
+name: LLivesHardcore
+main: com.lmpx.lliveshardcore.Main
+version: "1.0.0"
+author: LIMPIX31
+softdepend:
+  - PlaceholderAPI
+api-version: 1.16
