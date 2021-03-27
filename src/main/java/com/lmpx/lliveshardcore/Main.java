@@ -41,7 +41,6 @@ public class Main extends JavaPlugin {
 
 
         //loading NMS
-
         String version = getNMSVersion();
         switch (version) {
             case "v1_16_R1": {
@@ -66,16 +65,23 @@ public class Main extends JavaPlugin {
             }
         }
 
+        //loading llhmanager
         llhManager = new LLHManager();
 
+
+        //registering events
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
+
+        if(getConfig().getBoolean("actionbarStats")){
+            llhManager.startActionBarInfoThread();
+        }
 
 
     }
 
     @Override
     public void onDisable() {
-
+        llhManager.stopActionBarInfoThread();
     }
 
     public static String getNMSVersion() {

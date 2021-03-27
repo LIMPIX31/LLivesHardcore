@@ -10,6 +10,10 @@ import java.io.*;
 
 public abstract class Functions {
 
+    public static double frtr(double value, double From1, double From2, double To1, double To2) {
+        return (value - From1) / (From2 - From1) * (To2 - To1) + To1;
+    }
+
     private static String getPluginMessageFinalString(String msg) {
         return ChatColor.BLUE + "[LLH] " + ChatColor.WHITE + msg;
     }
