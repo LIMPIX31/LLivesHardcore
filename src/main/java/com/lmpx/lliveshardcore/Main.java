@@ -1,5 +1,6 @@
 package com.lmpx.lliveshardcore;
 
+import com.lmpx.lliveshardcore.Handlers.JoinEvent;
 import com.lmpx.lliveshardcore.versions.NMSUtils;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R1;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R2;
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class Main extends JavaPlugin {
 
     public static NMSUtils nms;
+    public static LLHManager llhManager;
 
     @Override
     public void onEnable() {
@@ -36,7 +38,6 @@ public class Main extends JavaPlugin {
             getLogger().severe(ChatColor.RED + "Required PlaceholderAPI");
             Bukkit.getPluginManager().disablePlugin(this);
         }
-
 
 
         //loading NMS
@@ -65,6 +66,10 @@ public class Main extends JavaPlugin {
             }
         }
 
+        llhManager = new LLHManager();
+
+        Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
+
 
     }
 
@@ -78,8 +83,8 @@ public class Main extends JavaPlugin {
         return v.substring(v.lastIndexOf('.') + 1);
     }
 
-    public static void nmsLoaded() {
-        Bukkit.getLogger().info(ChatColor.GREEN + "NMS (" + getNMSVersion() + ") loaded!");
+    public void nmsLoaded() {
+        getLogger().info(ChatColor.GREEN + "NMS (" + getNMSVersion() + ") loaded!");
     }
 
 }

@@ -1,1 +1,5 @@
 messagesLang: ru
+
+startLivesCount: 9
+startPoints: 0
+healthLimit: 2

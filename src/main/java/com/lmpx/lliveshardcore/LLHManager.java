@@ -9,9 +9,9 @@ public class LLHManager {
 
     public Main plugin = Main.getPlugin(Main.class);
 
-    public NamespacedKey lives = new NamespacedKey(plugin, "lives");
-    public NamespacedKey points = new NamespacedKey(plugin, "points");
-    public NamespacedKey advsc = new NamespacedKey(plugin, "advancementsCompleted");
+    private NamespacedKey lives = new NamespacedKey(plugin, "lives");
+    private NamespacedKey points = new NamespacedKey(plugin, "points");
+    private NamespacedKey advsc = new NamespacedKey(plugin, "advancementsCompleted");
 
     public int getLives(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
@@ -52,11 +52,21 @@ public class LLHManager {
         }
     }
 
-    public void AdvscUp(Player player) {
+    public void advscUp(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
         if (dataContainer.has(advsc, PersistentDataType.INTEGER)) {
             dataContainer.set(advsc, PersistentDataType.INTEGER, dataContainer.get(advsc, PersistentDataType.INTEGER) + 1);
+        } else {
+            dataContainer.set(advsc, PersistentDataType.INTEGER, 0);
         }
+    }
+
+    public boolean isNew(Player player) {
+        PersistentDataContainer dataContainer = player.getPersistentDataContainer();
+        boolean isDataLives = dataContainer.has(lives, PersistentDataType.INTEGER);
+        boolean isDataPoints = dataContainer.has(points, PersistentDataType.INTEGER);
+        boolean isDataAdvcs = dataContainer.has(advsc, PersistentDataType.INTEGER);
+        return !isDataLives || !isDataPoints || !isDataAdvcs;
     }
 
 }
