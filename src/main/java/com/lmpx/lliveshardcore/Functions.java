@@ -1,5 +1,6 @@
 package com.lmpx.lliveshardcore;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,6 +13,10 @@ public abstract class Functions {
 
     public static double frtr(double value, double From1, double From2, double To1, double To2) {
         return (value - From1) / (From2 - From1) * (To2 - To1) + To1;
+    }
+
+    public static int roundTo(int x, int y) {
+        return (int) Math.floor(((x + y) / y)) * y;
     }
 
     private static String getPluginMessageFinalString(String msg) {
@@ -120,6 +125,29 @@ public abstract class Functions {
         YamlConfiguration messages = YamlConfiguration.loadConfiguration(messagesFile);
         return messages.getString(path);
 
+    }
+
+    public static String intToHexColor(int x, int min, int max) {
+        int maxColor = (int) Math.round(Functions.frtr(x, min, max, 0, 510));
+
+        int red = 255;
+        int green = 0;
+
+        for (int i = 0; i < maxColor; i++) {
+            if (green < 255) {
+                green++;
+            } else {
+                red--;
+            }
+        }
+
+        return StringUtils.leftPad(Integer.toHexString(red), 2, "0") + StringUtils.leftPad(Integer.toHexString(green), 2, "0") + "00";
+
+    }
+
+    public static String getHealthColor(Player player){
+        Main plugin = Main.getPlugin(Main.class);
+        return intToHexColor(Main.llhManager.getLives(player), 1, plugin.getConfig().getInt("startLivesCount"));
     }
 
 }

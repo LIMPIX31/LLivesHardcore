@@ -74,12 +74,16 @@ public class LLHManager {
         return !isDataLives || !isDataPoints || !isDataAdvcs;
     }
 
+    public void infoActionbar(Player player) {
+        Main.nms.sendActionBar(player, "[{\"text\":\"" + Main.llhManager.getLives(player) + "\",\"color\":\"#" + Functions.getHealthColor(player) + "\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.llhManager.getPoints(player) + "\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.llhManager.getAdvsc(player) + "\",\"color\":\"aqua\"}]");
+    }
+
     public void startActionBarInfoThread() {
         actionBarInfoThread = true;
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             while (actionBarInfoThread) {
                 for (Player player : Bukkit.getOnlinePlayers()) {
-                    Main.nms.sendActionBar(player, "[{\"text\":\"" + Main.llhManager.getLives(player) + "\",\"color\":\"#" + Main.llhManager.intToHexColor(Main.llhManager.getLives(player), 0, plugin.getConfig().getInt("startLivesCount")) + "\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.llhManager.getPoints(player) + "\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.llhManager.getAdvsc(player) + "\",\"color\":\"aqua\"}]");
+                    infoActionbar(player);
                 }
                 try {
                     Thread.sleep(500);
@@ -92,25 +96,6 @@ public class LLHManager {
 
     public void stopActionBarInfoThread() {
         actionBarInfoThread = false;
-    }
-
-
-    public String intToHexColor(int x, int min, int max) {
-        int maxColor = (int) Math.round(Functions.frtr(x, min, max, 0, 510));
-
-        int red = 255;
-        int green = 0;
-
-        for (int i = 0; i < maxColor; i++) {
-            if (green < 255) {
-                green++;
-            } else {
-                red--;
-            }
-        }
-
-        return StringUtils.leftPad(Integer.toHexString(red), 2, "0") + StringUtils.leftPad(Integer.toHexString(green), 2, "0") + "00";
-
     }
 
 }

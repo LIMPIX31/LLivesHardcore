@@ -4,4 +4,11 @@ startLivesCount: 9
 startPoints: 0
 healthLimit: 2
 
+reward: 2
+rewardMultiplier: 2
+threshold: 50
+totemCost: 20
+
 actionbarStats: true
+subtitleDeathMessage: true
+advancementRewardInChat: true
