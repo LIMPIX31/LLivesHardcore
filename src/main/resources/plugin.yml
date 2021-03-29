@@ -5,3 +5,7 @@ author: LIMPIX31
 softdepend:
   - PlaceholderAPI
 api-version: 1.16
+commands:
+  llh:
+    aliases:
+      - 1hp

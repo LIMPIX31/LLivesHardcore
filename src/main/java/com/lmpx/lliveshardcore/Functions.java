@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public abstract class Functions {
 
@@ -18,6 +19,7 @@ public abstract class Functions {
     public static int roundTo(int x, int y) {
         return (int) Math.floor(((x + y) / y)) * y;
     }
+
 
     private static String getPluginMessageFinalString(String msg) {
         return ChatColor.BLUE + "[LLH] " + ChatColor.WHITE + msg;
@@ -87,7 +89,7 @@ public abstract class Functions {
             }
             InputStream is = plugin.getClass().getClassLoader()
                     .getResourceAsStream("messages_" + lang + ".yml");
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
             StringBuilder defaultmessages = new StringBuilder();
             String line = br.readLine();
@@ -95,7 +97,8 @@ public abstract class Functions {
                 defaultmessages.append(line + "\n");
                 line = br.readLine();
             }
-            FileWriter messagesFile = new FileWriter(messages.getPath(), false);
+            Writer messagesFile = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(messages.getPath()), StandardCharsets.UTF_8));
             messagesFile.write(defaultmessages.toString());
             messagesFile.flush();
 
@@ -130,6 +133,9 @@ public abstract class Functions {
     public static String intToHexColor(int x, int min, int max) {
         int maxColor = (int) Math.round(Functions.frtr(x, min, max, 0, 510));
 
+        if (x < min) return "ff0000";
+        if (x > max) return "00ff00";
+
         int red = 255;
         int green = 0;
 
@@ -145,7 +151,7 @@ public abstract class Functions {
 
     }
 
-    public static String getHealthColor(Player player){
+    public static String getHealthColor(Player player) {
         Main plugin = Main.getPlugin(Main.class);
         return intToHexColor(Main.llhManager.getLives(player), 1, plugin.getConfig().getInt("startLivesCount"));
     }

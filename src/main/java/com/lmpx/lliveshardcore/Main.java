@@ -2,6 +2,7 @@ package com.lmpx.lliveshardcore;
 
 import com.lmpx.lliveshardcore.Handlers.JoinEvent;
 import com.lmpx.lliveshardcore.Handlers.MainEvents;
+import com.lmpx.lliveshardcore.commands.pluginCommand.PluginCommand;
 import com.lmpx.lliveshardcore.versions.NMSUtils;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R1;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R2;
@@ -69,7 +70,6 @@ public class Main extends JavaPlugin {
         //loading llhmanager
         llhManager = new LLHManager();
 
-
         //registering events
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new MainEvents(), this);
@@ -77,6 +77,9 @@ public class Main extends JavaPlugin {
         if(getConfig().getBoolean("actionbarStats")){
             llhManager.startActionBarInfoThread();
         }
+
+        PluginCommand pluginCommand = new PluginCommand();
+        pluginCommand.register();
 
 
     }
