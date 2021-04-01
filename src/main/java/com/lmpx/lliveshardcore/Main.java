@@ -1,23 +1,30 @@
 package com.lmpx.lliveshardcore;
 
-import com.lmpx.lliveshardcore.Handlers.JoinEvent;
-import com.lmpx.lliveshardcore.Handlers.MainEvents;
+import com.lmpx.lliveshardcore.handlers.JoinEvent;
+import com.lmpx.lliveshardcore.handlers.MainEvents;
+import com.lmpx.lliveshardcore.commands.buyLife.BuyLife;
 import com.lmpx.lliveshardcore.commands.pluginCommand.PluginCommand;
+import com.lmpx.lliveshardcore.placeholders.LLHPlaceholder;
 import com.lmpx.lliveshardcore.versions.NMSUtils;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R1;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R2;
 import com.lmpx.lliveshardcore.versions.NMSUtils_1_16_R3;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main extends JavaPlugin {
 
     public static NMSUtils nms;
-    public static LLHManager llhManager;
+    public static SQLite sqLite;
+
+    public static Map<Player, Boolean> buyAccept = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -29,13 +36,19 @@ public class Main extends JavaPlugin {
         }
 
         try {
+            sqLite = new SQLite();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             Functions.createMessagesFile(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-
+            new LLHPlaceholder().register();
         } else {
             getLogger().severe(ChatColor.RED + "Required PlaceholderAPI");
             Bukkit.getPluginManager().disablePlugin(this);
@@ -67,26 +80,26 @@ public class Main extends JavaPlugin {
             }
         }
 
-        //loading llhmanager
-        llhManager = new LLHManager();
-
         //registering events
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
         Bukkit.getPluginManager().registerEvents(new MainEvents(), this);
 
-        if(getConfig().getBoolean("actionbarStats")){
-            llhManager.startActionBarInfoThread();
+        if (getConfig().getBoolean("actionbarStats")) {
+            Functions.startActionBarInfoThread();
         }
 
         PluginCommand pluginCommand = new PluginCommand();
         pluginCommand.register();
+
+        BuyLife buyLife = new BuyLife();
+        buyLife.register();
 
 
     }
 
     @Override
     public void onDisable() {
-        llhManager.stopActionBarInfoThread();
+        Functions.stopActionBarInfoThread();
     }
 
     public static String getNMSVersion() {

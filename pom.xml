@@ -6,7 +6,7 @@
 
     <groupId>com.lmpx.lliveshardcore</groupId>
     <artifactId>LLivesHardcore</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.E0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -16,14 +16,14 @@
 
     <build>
         <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>3.2.0</version>
-                            <configuration>
-                                <outputDirectory>D:\MSERVER#2 — копия\plugins</outputDirectory>
-                            </configuration>
-                        </plugin>
+<!--                        <plugin>-->
+<!--                            <groupId>org.apache.maven.plugins</groupId>-->
+<!--                            <artifactId>maven-jar-plugin</artifactId>-->
+<!--                            <version>3.2.0</version>-->
+<!--                            <configuration>-->
+<!--                                <outputDirectory>D:\MSERVER#2 — копия\plugins</outputDirectory>-->
+<!--                            </configuration>-->
+<!--                        </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -60,6 +60,11 @@
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>dakani</id>
+            <name>Dakani Nexus Repo</name>
+            <url>http://repo.dakanilabs.com/content/repositories/public</url>
         </repository>
     </repositories>
 

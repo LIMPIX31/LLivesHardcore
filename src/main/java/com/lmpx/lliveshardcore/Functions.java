@@ -1,9 +1,12 @@
 package com.lmpx.lliveshardcore;
 
+import com.iridium.iridiumcolorapi.IridiumColorAPI;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -11,6 +14,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public abstract class Functions {
+
+    private static boolean actionBarInfoThread;
 
     public static double frtr(double value, double From1, double From2, double To1, double To2) {
         return (value - From1) / (From2 - From1) * (To2 - To1) + To1;
@@ -34,11 +39,15 @@ public abstract class Functions {
     }
 
     public static void invalidSubcommand(CommandSender sender) {
-        pluginMessage(sender, ChatColor.RED + getMessage("invalidSubcommand"));
+        pluginMessage(sender, getMessage("invalidSubcommand"));
     }
 
     public static void noPermission(CommandSender sender) {
-        pluginMessage(sender, ChatColor.RED + getMessage("noPermission"));
+        pluginMessage(sender, getMessage("noPermission"));
+    }
+
+    public static void onlyPlayer(CommandSender sender) {
+        pluginMessage(sender, Functions.getMessage("onlyPlayer"));
     }
 
     public static String permRoot() {
@@ -67,7 +76,7 @@ public abstract class Functions {
     }
 
     public static void invalidArgument(CommandSender sender) {
-        pluginMessage(sender, ChatColor.RED + getMessage("invalidArgument"));
+        pluginMessage(sender, getMessage("invalidArgument"));
     }
 
     public static void createMessagesFile(Main plugin) throws IOException {
@@ -126,7 +135,7 @@ public abstract class Functions {
             }
         }
         YamlConfiguration messages = YamlConfiguration.loadConfiguration(messagesFile);
-        return messages.getString(path);
+        return IridiumColorAPI.process(ChatColor.translateAlternateColorCodes('&', messages.getString(path)));
 
     }
 
@@ -153,7 +162,60 @@ public abstract class Functions {
 
     public static String getHealthColor(Player player) {
         Main plugin = Main.getPlugin(Main.class);
-        return intToHexColor(Main.llhManager.getLives(player), 1, plugin.getConfig().getInt("startLivesCount"));
+        try {
+            return intToHexColor(Main.sqLite.getDataInt(player, SQLite.KEY_LIVES), 1, plugin.getConfig().getInt("startLivesCount"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static void infoActionbar(Player player) {
+        try {
+            Main.nms.sendActionBar(player, "[{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) + "\",\"color\":\"#" + Functions.getHealthColor(player) + "\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) + "\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC) + "\",\"color\":\"aqua\"}]");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void startActionBarInfoThread() {
+        Main plugin = Main.getPlugin(Main.class);
+        actionBarInfoThread = true;
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            while (actionBarInfoThread) {
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    infoActionbar(player);
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public static void stopActionBarInfoThread() {
+        actionBarInfoThread = false;
+    }
+
+    public static int getLifePrice(Player player) {
+        Main plugin = Main.getPlugin(Main.class);
+        FileConfiguration config = plugin.getConfig();
+        try {
+            return config.getInt("startLivePrice") + (config.getInt("nextLivePrice") * Main.sqLite.getDataInt(player, SQLite.KEY_BL));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static String combineArgs(String[] args) {
+        StringBuilder result = new StringBuilder();
+        for (String arg : args) {
+            result.append(arg);
+        }
+        return result.toString();
     }
 
 }

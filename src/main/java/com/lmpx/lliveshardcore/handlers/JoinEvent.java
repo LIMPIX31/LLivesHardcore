@@ -1,4 +1,4 @@
-package com.lmpx.lliveshardcore.Handlers;
+package com.lmpx.lliveshardcore.handlers;
 
 import com.lmpx.lliveshardcore.Main;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,16 +12,14 @@ public class JoinEvent implements Listener {
     public Main plugin = Main.getPlugin(Main.class);
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) throws Exception {
         Player player = e.getPlayer();
         FileConfiguration config = plugin.getConfig();
-        if(Main.llhManager.isNew(player)){
-            Main.llhManager.setLives(player, config.getInt("startLivesCount"));
-            Main.llhManager.setPoints(player, config.getInt("startPoints"));
-            Main.llhManager.advscUp(player);
+        if (Main.sqLite.isNew(player)) {
+            Main.sqLite.newPlayer(player);
         }
+        Main.buyAccept.put(player, false);
         player.setMaxHealth(config.getInt("healthLimit"));
-
     }
 
 }

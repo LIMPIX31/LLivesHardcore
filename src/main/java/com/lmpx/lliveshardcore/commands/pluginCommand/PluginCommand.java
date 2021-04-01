@@ -7,9 +7,8 @@ import com.lmpx.lliveshardcore.commands.LCommand;
 import com.lmpx.lliveshardcore.commands.LTabCompleter;
 import com.lmpx.lliveshardcore.commands.SubCommand;
 import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.Reload;
-import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.setLives;
-import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.setPoints;
-import org.bukkit.Bukkit;
+import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.SetLives;
+import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.SetPoints;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,8 +28,8 @@ public class PluginCommand implements CommandExecutor, LCommand {
         scs = new ArrayList<>();
 
         scs.add(new Reload());
-        scs.add(new setLives());
-        scs.add(new setPoints());
+        scs.add(new SetLives());
+        scs.add(new SetPoints());
 
         plugin.getLogger().info(Functions.subcmdregistered(name()));
     }
@@ -102,7 +101,11 @@ public class PluginCommand implements CommandExecutor, LCommand {
                     }
                 }
                 if (args[0].equalsIgnoreCase(sc.name()) || isAlias) {
-                    sc.onCommand(sender, newargs.toArray(new String[newargs.size()]));
+                    try {
+                        sc.onCommand(sender, newargs.toArray(new String[newargs.size()]));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     executed = true;
                 }
             }

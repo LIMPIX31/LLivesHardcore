@@ -2,6 +2,7 @@ package com.lmpx.lliveshardcore.commands.pluginCommand.subcommands;
 
 import com.lmpx.lliveshardcore.Functions;
 import com.lmpx.lliveshardcore.Main;
+import com.lmpx.lliveshardcore.SQLite;
 import com.lmpx.lliveshardcore.commands.LCommand;
 import com.lmpx.lliveshardcore.commands.SubCommand;
 import org.bukkit.Bukkit;
@@ -10,14 +11,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class setPoints extends SubCommand implements LCommand {
+public class SetPoints extends SubCommand implements LCommand {
     @Override
     public String getPermission() {
         return "setPoints";
     }
 
     @Override
-    public void onCommand(CommandSender sender, @NotNull String[] args) {
+    public void onCommand(CommandSender sender, @NotNull String[] args) throws Exception {
+
+        if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
+            Functions.noPermission(sender);
+            return;
+        }
 
         if (args.length < 2) {
             Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidArgument"));
@@ -39,24 +45,24 @@ public class setPoints extends SubCommand implements LCommand {
         String playerarg = args[0];
         Player player = Bukkit.getPlayerExact(playerarg);
         if (player == null) {
-            Functions.pluginMessage(sender, ChatColor.translateAlternateColorCodes('&', Functions.getMessage("playerNotFound")).replaceAll("\\{PLAYER}", playerarg));
+            Functions.pluginMessage(sender, Functions.getMessage("playerNotFound").replaceAll("\\{PLAYER}", playerarg));
             return;
         }
 
 
-        if(!isAdd && !isRemove){
-            Main.llhManager.setPoints(player, arg);
-        }else{
-            if(isAdd){
-                Main.llhManager.setPoints(player, Main.llhManager.getPoints(player) + arg);
+        if (!isAdd && !isRemove) {
+            Main.sqLite.saveData(player, SQLite.KEY_POINTS, arg);
+        } else {
+            if (isAdd) {
+                Main.sqLite.saveData(player, SQLite.KEY_POINTS, Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) + arg);
             }
-            if(isRemove){
-                Main.llhManager.setPoints(player, Main.llhManager.getPoints(player) - arg);
+            if (isRemove) {
+                Main.sqLite.saveData(player, SQLite.KEY_POINTS, Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) - arg);
             }
         }
 
-        Functions.pluginMessage(sender, ChatColor.translateAlternateColorCodes('&', Functions.getMessage("pointsUpdated").replaceAll("\\{PLAYER}", player.getName())));
-        Main.llhManager.infoActionbar(player);
+        Functions.pluginMessage(sender, Functions.getMessage("pointsUpdated").replaceAll("\\{PLAYER}", player.getName()));
+        Functions.infoActionbar(player);
 
 
     }
