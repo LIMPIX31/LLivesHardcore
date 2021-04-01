@@ -13,3 +13,11 @@ commands:
     aliases:
       - blife
       - buyl
+permissions:
+  llh.*:
+    children:
+      - llh.pluginCommand
+      - llh.reloadConfig
+      - llh.setLives
+      - llh.setPoints
+      - llh.buyLife

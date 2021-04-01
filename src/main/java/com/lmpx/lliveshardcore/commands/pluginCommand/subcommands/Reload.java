@@ -13,7 +13,7 @@ public class Reload extends SubCommand implements LCommand {
 
     @Override
     public String getPermission() {
-        return null;
+        return "reloadConfig";
     }
 
     @Override
