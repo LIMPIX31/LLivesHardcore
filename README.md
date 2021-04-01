@@ -24,7 +24,7 @@ subtitleDeathMessage: true     # отображать всем игрокам о
 advancementRewardInChat: true  # выводить в чат сообщение о том сколько очков вы получили за выполнение ачивки
 ```
 ## Команды
-`/llh <subcommand>` -  команда плагина, где <subcommand> подкоманда плагина
+`/llh <subcommand>` -  команда плагина, где `<subcommand>` подкоманда плагина
 - Право `llh.pluginCommand`
 
 `/llh`**Подкоманды**
