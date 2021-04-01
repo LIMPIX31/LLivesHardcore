@@ -1,6 +1,9 @@
 # LLivesHardcore
 **Устройте настоящий хардкор с 1 сердцем и 9 жизнями**
 
+## Скачать
+https://github.com/LIMPIX31/LLivesHardcore/releases/
+
 # Документация
 ## Конфиг
 
