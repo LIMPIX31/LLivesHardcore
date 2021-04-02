@@ -19,7 +19,7 @@ public class SetPoints extends SubCommand implements LCommand {
 
     @Override
     public void onCommand(CommandSender sender, @NotNull String[] args) throws Exception {
-
+        // сэтаем очки
         if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
             Functions.noPermission(sender);
             return;

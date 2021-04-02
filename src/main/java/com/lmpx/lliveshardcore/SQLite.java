@@ -6,18 +6,24 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.sql.*;
 
+// SQLIte SQLIte база
+
 public class SQLite {
 
     public Main plugin = Main.getPlugin(Main.class);
 
     private String url;
 
+    // ключики
     private final static String TBNAME = "player_data";
     public final static String KEY_NAME = "name";
     public final static String KEY_LIVES = "lives";
     public final static String KEY_POINTS = "points";
     public final static String KEY_ADVSC = "advsc";
     public final static String KEY_BL = "boughtLives";
+
+    // Осторожно много исключений
+    // тут начинается магия SQL
 
     public SQLite() throws Exception {
         url = "jdbc:sqlite:" + plugin.getDataFolder() + File.separator + "database.db";

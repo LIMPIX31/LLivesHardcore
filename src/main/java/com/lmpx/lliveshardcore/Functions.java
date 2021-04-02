@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+// Тут ничего комментировать не буду
+
 public abstract class Functions {
 
     private static boolean actionBarInfoThread;

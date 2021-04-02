@@ -29,7 +29,7 @@ public class BuyLife implements CommandExecutor, LCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String s, @NotNull String[] args) {
-
+        // Покупаем жызу
         if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
             Functions.noPermission(sender);
             return true;
@@ -58,6 +58,9 @@ public class BuyLife implements CommandExecutor, LCommand {
             }
         } else {
 
+            // Осторожно ад try/catch
+            // Осторожно ад try/catch
+            // Осторожно ад try/catch
 
             if ((args[0].equalsIgnoreCase("accept")) && accepted) {
 

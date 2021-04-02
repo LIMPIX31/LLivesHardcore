@@ -9,6 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+// Великие плейсхолдеры и ад из try/catch
+
 public class LLHPlaceholder extends PlaceholderExpansion {
     @Override
     public @NotNull String getIdentifier() {

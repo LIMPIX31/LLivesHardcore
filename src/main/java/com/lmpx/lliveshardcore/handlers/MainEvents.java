@@ -15,6 +15,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.inventory.ItemStack;
 
+// Вся магия 1хп тут, мне лень это комментировать, разберешься сам
+
 public class MainEvents implements Listener {
 
     public Main plugin = Main.getPlugin(Main.class);
@@ -24,7 +26,6 @@ public class MainEvents implements Listener {
         FileConfiguration config = plugin.getConfig();
         Player player = e.getEntity();
         int lives = Main.sqLite.getDataInt(player, SQLite.KEY_LIVES);
-//        Main.llhManager.setLives(player, Main.llhManager.getLives(player) - 1);
         Main.sqLite.saveData(player, SQLite.KEY_LIVES, lives - 1);
         if(Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) <= 0){
             player.setGameMode(GameMode.SPECTATOR);
@@ -67,7 +68,6 @@ public class MainEvents implements Listener {
                     Bukkit.getWorld(player.getWorld().getName()).dropItemNaturally(player.getLocation(), offHand);
                 }
             } else {
-//                Main.llhManager.setPoints(player, Main.llhManager.getPoints(player) - config.getInt("totemCost"));
                 Main.sqLite.saveData(player, SQLite.KEY_POINTS, Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) - config.getInt("totemCost"));
             }
         }

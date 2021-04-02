@@ -19,7 +19,7 @@ public class SetLives extends SubCommand implements LCommand {
 
     @Override
     public void onCommand(CommandSender sender, @NotNull String[] args) throws Exception {
-
+        // сэтаем жызу
         if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
             Functions.noPermission(sender);
             return;
