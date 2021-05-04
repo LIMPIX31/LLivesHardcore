@@ -52,7 +52,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        statement.executeUpdate(String.format("UPDATE %s SET `%s`= %d WHERE `name` = '%s'", TBNAME, key, value, player.getUniqueId().toString()));
+        statement.executeUpdate(String.format("UPDATE %s SET `%s`= %d WHERE `name` = '%s'", TBNAME, key, value, player.getName()));
 
         statement.close();
         connection.close();
@@ -62,7 +62,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        statement.executeUpdate(String.format("UPDATE %s SET `%s`= '%s' WHERE `name` = '%s'", TBNAME, key, value, player.getUniqueId().toString()));
+        statement.executeUpdate(String.format("UPDATE %s SET `%s`= '%s' WHERE `name` = '%s'", TBNAME, key, value, player.getName()));
 
         statement.close();
         connection.close();
@@ -73,7 +73,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        statement.executeUpdate(String.format("INSERT INTO %s (`name`, `lives`, `points`,`advsc`,`boughtLives`) VALUES ('%s', %d, %d, %d, %d)", TBNAME, player.getUniqueId().toString(), config.getInt("startLivesCount"), config.getInt("startPoints"), 0, 0));
+        statement.executeUpdate(String.format("INSERT INTO %s (`name`, `lives`, `points`,`advsc`,`boughtLives`) VALUES ('%s', %d, %d, %d, %d)", TBNAME, player.getName(), config.getInt("startLivesCount"), config.getInt("startPoints"), 0, 0));
 
         statement.close();
         connection.close();
@@ -85,7 +85,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getUniqueId().toString()));
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME,player.getName()));
         result = resultSet.getString(key);
 
         statement.close();
@@ -100,7 +100,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getUniqueId().toString()));
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getName()));
         result = resultSet.getInt(key);
 
         statement.close();
@@ -113,7 +113,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        ResultSet result = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getUniqueId().toString()));
+        ResultSet result = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getName()));
 
         statement.close();
         connection.close();

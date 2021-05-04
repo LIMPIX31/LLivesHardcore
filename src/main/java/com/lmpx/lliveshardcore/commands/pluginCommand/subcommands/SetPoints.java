@@ -17,6 +17,13 @@ public class SetPoints extends SubCommand implements LCommand {
         return "setPoints";
     }
 
+    public String[] subPermissions() {
+        return new String[]{
+                "add", // Добавить поинты [0]
+                "remove" // Отобрать поинты [1]
+        };
+    }
+
     @Override
     public void onCommand(CommandSender sender, @NotNull String[] args) throws Exception {
         // сэтаем очки
@@ -27,14 +34,29 @@ public class SetPoints extends SubCommand implements LCommand {
 
         if (args.length < 2) {
             Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidArgument"));
+            Functions.pluginMessage(sender, ChatColor.GRAY+""+ChatColor.ITALIC+ "/"+name()+" <player> <amount>");
             return;
         }
 
         boolean isAdd = false;
         boolean isRemove = false;
 
-        if (args[1].charAt(0) == '+') isAdd = true;
-        if (args[1].charAt(0) == '-') isRemove = true;
+        if (args[1].charAt(0) == '+') {
+            isAdd = true;
+            if (!(sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + "*")) ||
+                    sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + subPermissions()[0])))) {
+                Functions.noPermission(sender);
+                return;
+            }
+        }
+        if (args[1].charAt(0) == '-') {
+            isRemove = true;
+            if (!(sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + "*")) ||
+                    sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + subPermissions()[1])))) {
+                Functions.noPermission(sender);
+                return;
+            }
+        }
         args[1] = args[1].replaceAll("\\+", "").replaceAll("-", "");
 
         if (!Functions.isNumber(args[1]) || Integer.parseInt(args[1]) < 0) {

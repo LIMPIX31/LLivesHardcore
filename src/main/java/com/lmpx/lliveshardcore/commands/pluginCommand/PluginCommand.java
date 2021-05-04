@@ -6,9 +6,7 @@ import com.lmpx.lliveshardcore.Main;
 import com.lmpx.lliveshardcore.commands.LCommand;
 import com.lmpx.lliveshardcore.commands.LTabCompleter;
 import com.lmpx.lliveshardcore.commands.SubCommand;
-import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.Reload;
-import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.SetLives;
-import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.SetPoints;
+import com.lmpx.lliveshardcore.commands.pluginCommand.subcommands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,6 +30,8 @@ public class PluginCommand implements CommandExecutor, LCommand {
         scs.add(new Reload());
         scs.add(new SetLives());
         scs.add(new SetPoints());
+        scs.add(new SetAdvsc());
+        scs.add(new SetBoughtLives());
 
         plugin.getLogger().info(Functions.subcmdregistered(name()));
     }
@@ -66,7 +66,7 @@ public class PluginCommand implements CommandExecutor, LCommand {
             int iterated = 0;
             while (sci.hasNext()) {
                 if (iterated < scs.size()-1) {
-                    help.append("&3" + sci.next().name() + " &4|");
+                    help.append("&3" + sci.next().name() + " &4| ");
                 } else {
                     help.append("&3" + sci.next().name());
                 }

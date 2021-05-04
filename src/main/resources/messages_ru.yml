@@ -1,4 +1,5 @@
 configReloaded: "&aПлагин перезагружен"
+errorOccurred: "&4Произошла ошибка. Подробнее в StackTrace"
 invalidSubcommand: "&cНеверная подкоманда"
 noPermission: "&cНет прав для выполнения данной команды"
 invalidArgument: "&cНеверный аргумент"
@@ -15,3 +16,7 @@ alreadyRequestedBuy: "&cВы уже отправили запрос покупк
 buySuccessful: "&aПокупка прошла успешно"
 notEnoughPoints: "&cНедостаточно очков. Требуеться еще &a{REQ}"
 noActivePurchaseRequest: "&cНет активного запроса на покупку"
+playerDataUpdated: "&aДанные игрока успешно обновлены"
+playerToPlayer: "&cНельзя передать очки самому себе"
+pointsSuccessfullyTransferred: "&bВы передали &a{AMOUNT}&b очков игроку &7<&f{PLAYER}&7>"
+pointsSuccessfullyReceived: "&bВы получили &a{AMOUNT}&b очков от игрока &7<&f{PLAYER}&7>"

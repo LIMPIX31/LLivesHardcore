@@ -1,5 +1,6 @@
 package com.lmpx.lliveshardcore;
 // Импорты
+import com.lmpx.lliveshardcore.commands.payPoints.PayPoints;
 import com.lmpx.lliveshardcore.handlers.JoinEvent;
 import com.lmpx.lliveshardcore.handlers.MainEvents;
 import com.lmpx.lliveshardcore.commands.buyLife.BuyLife;
@@ -107,6 +108,9 @@ public class Main extends JavaPlugin {
 
         BuyLife buyLife = new BuyLife();
         buyLife.register();
+
+        PayPoints payPoints = new PayPoints();
+        payPoints.register();
 
 
     }

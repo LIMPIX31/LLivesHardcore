@@ -6,7 +6,7 @@
 
     <groupId>com.lmpx.lliveshardcore</groupId>
     <artifactId>LLivesHardcore</artifactId>
-    <version>1.0.E0</version>
+    <version>1.0.E1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

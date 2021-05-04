@@ -220,4 +220,12 @@ public abstract class Functions {
         return result.toString();
     }
 
+    public static String permissionBuilder(String... args) {
+        StringBuilder tree = new StringBuilder();
+        for (String perm : args) {
+            tree.append(perm).append(".");
+        }
+        return tree.substring(0, tree.length() - 1);
+    }
+
 }
