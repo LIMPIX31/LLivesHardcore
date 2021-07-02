@@ -1,5 +1,6 @@
 package com.lmpx.lliveshardcore;
 // Импорты
+import com.lmpx.lliveshardcore.commands.getPrice.GetPrice;
 import com.lmpx.lliveshardcore.commands.payPoints.PayPoints;
 import com.lmpx.lliveshardcore.handlers.JoinEvent;
 import com.lmpx.lliveshardcore.handlers.MainEvents;
@@ -21,15 +22,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class Main extends JavaPlugin {
 
     // От NMS мне плохо
-    public static NMSUtils nms;
+//    public static NMSUtils nms;
     // база азаза
     public static SQLite sqLite;
     // тут храним запросы на покупку
-    public static Map<Player, Boolean> buyAccept = new HashMap<>();
+    public static HashMap<Player, Boolean> buyAccept = new HashMap<>();
+
+    public static HashMap<Player, Integer> pointsTimer = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -68,30 +72,30 @@ public class Main extends JavaPlugin {
         }
 
 
-        //О великий ЭНЭМЭС
-        String version = getNMSVersion();
-        switch (version) {
-            case "v1_16_R1": {
-                nms = new NMSUtils_1_16_R1();
-                nmsLoaded();
-                break;
-            }
-            case "v1_16_R2": {
-                nms = new NMSUtils_1_16_R2();
-                nmsLoaded();
-                break;
-            }
-            case "v1_16_R3": {
-                nms = new NMSUtils_1_16_R3();
-                nmsLoaded();
-                break;
-            }
-            default: {
-                getLogger().severe(ChatColor.DARK_RED + "Unsupported Minecraft Server version (" + version + ")");
-                Bukkit.getPluginManager().disablePlugin(this);
-                break;
-            }
-        }
+        //О великий ЭНЭМЭС (умер)
+//        String version = getNMSVersion();
+//        switch (version) {
+//            case "v1_16_R1": {
+//                nms = new NMSUtils_1_16_R1();
+//                nmsLoaded();
+//                break;
+//            }
+//            case "v1_16_R2": {
+//                nms = new NMSUtils_1_16_R2();
+//                nmsLoaded();
+//                break;
+//            }
+//            case "v1_16_R3": {
+//                nms = new NMSUtils_1_16_R3();
+//                nmsLoaded();
+//                break;
+//            }
+//            default: {
+//                getLogger().severe(ChatColor.DARK_RED + "Unsupported Minecraft Server version (" + version + ")");
+//                Bukkit.getPluginManager().disablePlugin(this);
+//                break;
+//            }
+//        }
 
         //Ивентики регаем
         Bukkit.getPluginManager().registerEvents(new JoinEvent(), this);
@@ -101,6 +105,8 @@ public class Main extends JavaPlugin {
         if (getConfig().getBoolean("actionbarStats")) {
             Functions.startActionBarInfoThread();
         }
+
+        Functions.startPointsTimerThread();
 
         // регаем команды
         PluginCommand pluginCommand = new PluginCommand();
@@ -112,6 +118,9 @@ public class Main extends JavaPlugin {
         PayPoints payPoints = new PayPoints();
         payPoints.register();
 
+        GetPrice getPrice = new GetPrice();
+        getPrice.register();
+
 
     }
 
@@ -119,15 +128,17 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         //стопяем экшнбар
         Functions.stopActionBarInfoThread();
+
+        Functions.stopPointsTimerThread();
     }
 
-    public static String getNMSVersion() {
-        String v = Bukkit.getServer().getClass().getPackage().getName();
-        return v.substring(v.lastIndexOf('.') + 1);
-    }
-
-    public void nmsLoaded() {
-        getLogger().info(ChatColor.GREEN + "NMS (" + getNMSVersion() + ") loaded!");
-    }
+//    public static String getNMSVersion() {
+//        String v = Bukkit.getServer().getClass().getPackage().getName();
+//        return v.substring(v.lastIndexOf('.') + 1);
+//    }
+//
+//    public void nmsLoaded() {
+//        getLogger().info(ChatColor.GREEN + "NMS (" + getNMSVersion() + ") loaded!");
+//    }
 
 }

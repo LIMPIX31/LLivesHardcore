@@ -2,12 +2,15 @@ package com.lmpx.lliveshardcore;
 
 import com.iridium.iridiumcolorapi.IridiumColorAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
-import org.apache.commons.lang3.StringUtils;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.StringUtils;
 import org.bukkit.entity.Player;
 
 import java.io.*;
@@ -18,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 public abstract class Functions {
 
     private static boolean actionBarInfoThread;
+    private static boolean pointsTimerThread;
 
     public static double frtr(double value, double From1, double From2, double To1, double To2) {
         return (value - From1) / (From2 - From1) * (To2 - To1) + To1;
@@ -173,8 +177,23 @@ public abstract class Functions {
     }
 
     public static void infoActionbar(Player player) {
+        Main plugin = Main.getPlugin(Main.class);
+        FileConfiguration config = plugin.getConfig();
+        String abar = config.getString("actionBarFormat");
         try {
-            Main.nms.sendActionBar(player, "[{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) + "\",\"color\":\"#" + Functions.getHealthColor(player) + "\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) + "\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC) + "\",\"color\":\"aqua\"}]");
+//            Main.nms.sendActionBar(player, "[{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) + "\",\"color\":\"#" + Functions.getHealthColor(player) + "\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_POINTS) + "\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"" + Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC) + "\",\"color\":\"aqua\"}]");
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(
+                    TextComponent.toLegacyText(
+                            ComponentSerializer.parse(
+                                    PlaceholderAPI.setPlaceholders(player, abar
+                                            .replaceAll("\\{LIVES}", String.valueOf(Main.sqLite.getDataInt(player, SQLite.KEY_LIVES)))
+                                            .replaceAll("\\{LIVES_COLOR}", String.valueOf(Functions.getHealthColor(player)))
+                                            .replaceAll("\\{POINTS}", String.valueOf(Main.sqLite.getDataInt(player, SQLite.KEY_POINTS)))
+                                            .replaceAll("\\{ADVANCEMENTS}", String.valueOf(Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC))))
+                            )
+                    )
+                    )
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -226,6 +245,63 @@ public abstract class Functions {
             tree.append(perm).append(".");
         }
         return tree.substring(0, tree.length() - 1);
+    }
+
+    public static int parseTime(String timeString) {
+        String[] timeParts = timeString.split(" ");
+        int s = 0;
+        for (String timePart : timeParts) {
+            if (timePart.contains("s")) {
+                s = s + Integer.parseInt(timePart.replaceAll("s", ""));
+            } else if (timePart.contains("m")) {
+                s = s + Integer.parseInt(timePart.replaceAll("m", "")) * 60;
+            } else if (timePart.contains("h")) {
+                s = s + Integer.parseInt(timePart.replaceAll("h", "")) * 60 * 60;
+            }
+        }
+        return s;
+    }
+
+    public static void startPointsTimerThread() {
+        Main plugin = Main.getPlugin(Main.class);
+        pointsTimerThread = true;
+        FileConfiguration config = plugin.getConfig();
+        boolean enabled = config.getBoolean("pointsTimer.enabled");
+        int delay = Functions.parseTime(config.getString("pointsTimer.timer"));
+        String delayString = config.getString("pointsTimer.timer");
+        int reward = config.getInt("pointsTimer.reward");
+        if (enabled) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                while (pointsTimerThread) {
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        if (Main.pointsTimer.containsKey(player)) {
+                            int ps = Main.pointsTimer.get(player);
+                            Main.pointsTimer.remove(player);
+                            Main.pointsTimer.put(player, ps + 1);
+                            if (Main.pointsTimer.get(player) % delay == 0) {
+                                Main.sqLite.addPoints(player, reward);
+                                player.sendMessage(
+                                        Functions.getMessage("pointsTimerMessage")
+                                                .replaceAll("\\{time}", delayString)
+                                                .replaceAll("\\{amount}", String.valueOf(reward))
+                                );
+                            }
+                        } else {
+                            Main.pointsTimer.put(player, 0);
+                        }
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
+
+    public static void stopPointsTimerThread() {
+        pointsTimerThread = false;
     }
 
 }

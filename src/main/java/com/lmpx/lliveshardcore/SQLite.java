@@ -85,7 +85,7 @@ public class SQLite {
         Connection connection = getConnection();
         Statement statement = connection.createStatement();
 
-        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME,player.getName()));
+        ResultSet resultSet = statement.executeQuery(String.format("SELECT `name`,`lives`,`points`,`advsc`,`boughtLives` FROM %s WHERE `name`='%s'", TBNAME, player.getName()));
         result = resultSet.getString(key);
 
         statement.close();
@@ -119,6 +119,14 @@ public class SQLite {
         connection.close();
 
         return !result.next();
+    }
+
+    public void addPoints(Player player, int amount) {
+        try {
+            saveData(player, KEY_POINTS, getDataInt(player, KEY_POINTS) + amount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.lmpx.lliveshardcore.handlers;
 import com.lmpx.lliveshardcore.Functions;
 import com.lmpx.lliveshardcore.Main;
 import com.lmpx.lliveshardcore.SQLite;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -13,7 +14,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 // Вся магия 1хп тут, мне лень это комментировать, разберешься сам
 
@@ -27,14 +31,18 @@ public class MainEvents implements Listener {
         Player player = e.getEntity();
         int lives = Main.sqLite.getDataInt(player, SQLite.KEY_LIVES);
         Main.sqLite.saveData(player, SQLite.KEY_LIVES, lives - 1);
-        if(Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) <= 0){
+        if (Main.sqLite.getDataInt(player, SQLite.KEY_LIVES) <= 0) {
             player.setGameMode(GameMode.SPECTATOR);
             Functions.infoActionbar(player);
             if (!config.getBoolean("subtitleDeathMessage")) return;
             String subtitleDeathMessage = Functions.getMessage("subtitleLastDeathMessage").replaceAll("\\{PLAYER}", player.getName());
             player.sendTitle(" ", subtitleDeathMessage);
             Bukkit.broadcastMessage(subtitleDeathMessage);
-        }else{
+            List<String> commands = config.getStringList("onSpectatorCommands");
+            for (int i = 0; i < commands.size(); i++) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), PlaceholderAPI.setPlaceholders(player, commands.get(i)));
+            }
+        } else {
             Functions.infoActionbar(player);
             if (!config.getBoolean("subtitleDeathMessage")) return;
             String subtitleDeathMessage = Functions.getMessage("subtitleDeathMessage").replaceAll("\\{PLAYER}", player.getName());
@@ -42,6 +50,14 @@ public class MainEvents implements Listener {
             Bukkit.broadcastMessage(subtitleDeathMessage);
         }
 
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e){
+        Player player = e.getPlayer();
+        if(Main.pointsTimer.get(player) != null){
+            Main.pointsTimer.remove(player);
+        }
     }
 
     @EventHandler

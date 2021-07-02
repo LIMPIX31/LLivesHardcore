@@ -1,6 +1,6 @@
 name: LLivesHardcore
 main: com.lmpx.lliveshardcore.Main
-version: "1.0.E1"
+version: "1.1.0"
 author: LIMPIX31
 softdepend:
   - PlaceholderAPI
@@ -16,6 +16,8 @@ commands:
   paypoints:
     aliases:
       - pp
+  getprice:
+    usage: /getprice
 permissions:
   llh.*:
     children:
@@ -24,3 +26,5 @@ permissions:
       - llh.setLives
       - llh.setPoints
       - llh.buyLife
+      - llh.buylifefornpc
+      - llh.getprice

@@ -53,6 +53,20 @@ public class LLHPlaceholder extends PlaceholderExpansion {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else if(id.equalsIgnoreCase("life-price")){
+            return String.valueOf(Functions.getLifePrice(player));
+        }else if(id.equalsIgnoreCase("required-points")){
+            int required = 0;
+            try {
+                required = Functions.getLifePrice(player) - Main.sqLite.getDataInt(player, SQLite.KEY_POINTS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(required <= 0){
+                return "0";
+            }else{
+                return String.valueOf(required);
+            }
         }
         return "";
     }

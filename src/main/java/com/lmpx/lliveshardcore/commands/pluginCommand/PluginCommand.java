@@ -32,6 +32,7 @@ public class PluginCommand implements CommandExecutor, LCommand {
         scs.add(new SetPoints());
         scs.add(new SetAdvsc());
         scs.add(new SetBoughtLives());
+        scs.add(new BuyLife());
 
         plugin.getLogger().info(Functions.subcmdregistered(name()));
     }

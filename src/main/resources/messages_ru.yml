@@ -20,3 +20,4 @@ playerDataUpdated: "&aДанные игрока успешно обновлен�
 playerToPlayer: "&cНельзя передать очки самому себе"
 pointsSuccessfullyTransferred: "&bВы передали &a{AMOUNT}&b очков игроку &7<&f{PLAYER}&7>"
 pointsSuccessfullyReceived: "&bВы получили &a{AMOUNT}&b очков от игрока &7<&f{PLAYER}&7>"
+pointsTimerMessage: "&eВы наиграли &a{time} &e и получили &a{amount} очков"

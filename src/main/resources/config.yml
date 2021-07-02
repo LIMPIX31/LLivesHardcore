@@ -17,3 +17,13 @@ minPayment: 1
 actionbarStats: true
 subtitleDeathMessage: true
 advancementRewardInChat: true
+
+actionBarFormat: "[{\"text\":\"{LIVES}\",\"color\":\"#{LIVES_COLOR}\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"{POINTS}\",\"color\":\"yellow\"},{\"text\":\" | \",\"bold\":true,\"color\":\"dark_gray\"},{\"text\":\"{ADVANCEMENTS}\",\"color\":\"aqua\"}]"
+
+onSpectatorCommands:
+  - "gamemode spectator %player_name%"
+
+pointsTimer:
+  enabled: false
+  timer: "1h" # h - час m - минута s - секунда
+  reward: 15
