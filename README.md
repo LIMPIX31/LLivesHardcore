@@ -59,8 +59,10 @@ pointsTimer:                      # выдавать игроку каждые t
 
 `/buylife[buyl, blife] [?accept]` - позволяет игроку купить жизнь. После выполнения команды у игрока есть 20 секунд, чтобы подтвердить покупку командой `/buylife accept`
 - Право `llh.buyLife`
+ 
 `/paypoints[pp] <player> <amount>` - передать игроку `<player>`, `<amount>` очков
 - Право `llh.payPoints`
+
 `/getprice` - узнайте сколько стоит купить новую жизнь
 - Право `llh.getprice`
 
