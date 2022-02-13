@@ -9,32 +9,32 @@ import org.jetbrains.annotations.NotNull;
 
 public class Reload extends SubCommand implements LCommand {
 
-    public Main plugin = Main.getPlugin(Main.class);
+  public Main plugin = Main.getPlugin(Main.class);
 
-    @Override
-    public String getPermission() {
-        return "reloadConfig";
+  @Override
+  public String getPermission() {
+    return "reloadConfig";
+  }
+
+  @Override
+  public void onCommand(CommandSender sender, @NotNull String[] args) {
+    // перезагружаем конфиг
+    if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
+      Functions.noPermission(sender);
+      return;
     }
 
-    @Override
-    public void onCommand(CommandSender sender, @NotNull String[] args) {
-        // перезагружаем конфиг
-        if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
-            Functions.noPermission(sender);
-            return;
-        }
+    plugin.reloadConfig();
+    Functions.pluginMessage(sender, Functions.getMessage("configReloaded"));
+  }
 
-        plugin.reloadConfig();
-        Functions.pluginMessage(sender,Functions.getMessage("configReloaded"));
-    }
+  @Override
+  public String name() {
+    return "reload";
+  }
 
-    @Override
-    public String name() {
-        return "reload";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[]{"rl"};
-    }
+  @Override
+  public String[] aliases() {
+    return new String[]{"rl"};
+  }
 }

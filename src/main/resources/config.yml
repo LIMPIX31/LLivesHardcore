@@ -13,6 +13,8 @@ startLivePrice: 100
 nextLivePrice: 50
 
 minPayment: 1
+maxPayment: 500 # 0 - Отключить
+paymentCooldown: "15s"
 
 actionbarStats: true
 subtitleDeathMessage: true

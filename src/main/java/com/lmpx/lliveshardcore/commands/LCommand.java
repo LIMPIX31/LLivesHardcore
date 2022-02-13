@@ -4,12 +4,12 @@ import com.lmpx.lliveshardcore.Functions;
 
 public interface LCommand {
 
-    String getPermission();
+  String getPermission();
 
-    String name();
+  String name();
 
-    default String getPermissionWithRoot() {
-        return Functions.permRoot() + getPermission();
-    }
+  default String getPermissionWithRoot() {
+    return Functions.permRoot() + getPermission();
+  }
 
 }

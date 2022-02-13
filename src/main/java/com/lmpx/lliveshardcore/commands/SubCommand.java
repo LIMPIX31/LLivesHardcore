@@ -6,9 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class SubCommand {
 
-    public abstract void onCommand(CommandSender sender, @NotNull String[] args) throws Exception;
+  public abstract void onCommand(CommandSender sender, @NotNull String[] args) throws Exception;
 
-    public abstract String name();
-    public abstract String[] aliases();
+  public abstract String name();
+
+  public abstract String[] aliases();
 
 }

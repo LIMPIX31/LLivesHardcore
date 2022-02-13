@@ -70,13 +70,13 @@ public class SQLite {
 
     public void newPlayer(Player player) throws Exception {
         FileConfiguration config = plugin.getConfig();
-        Connection connection = getConnection();
-        Statement statement = connection.createStatement();
+            Connection connection = getConnection();
+            Statement statement = connection.createStatement();
 
-        statement.executeUpdate(String.format("INSERT INTO %s (`name`, `lives`, `points`,`advsc`,`boughtLives`) VALUES ('%s', %d, %d, %d, %d)", TBNAME, player.getName(), config.getInt("startLivesCount"), config.getInt("startPoints"), 0, 0));
+            statement.executeUpdate(String.format("INSERT INTO %s (`name`, `lives`, `points`,`advsc`,`boughtLives`) VALUES ('%s', %d, %d, %d, %d)", TBNAME, player.getName(), config.getInt("startLivesCount"), config.getInt("startPoints"), 0, 0));
 
-        statement.close();
-        connection.close();
+            statement.close();
+            connection.close();
     }
 
     public String getDataString(Player player, String key) throws Exception {

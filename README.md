@@ -23,6 +23,8 @@ startLivePrice: 100               # Стартовая цена жизни
 nextLivePrice: 50                 # + к цене жизни после каждой покупки
 
 minPayment: 1                     # минимальное кол-во очков которое можно передать игроку
+maxPayment: 500                   # 0 - Отключить
+paymentCooldown: "15s"
 
 actionbarStats: true              # выводить информацию (жизни, очки, ачивки) в экшнбар
 subtitleDeathMessage: true        # отображать всем игрокам оповещение о смерти игрока
