@@ -37,6 +37,7 @@ public class PayPoints implements CommandExecutor, LCommand {
     if (args.length < 2) {
       Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidArgument"));
       Functions.pluginMessage(sender, ChatColor.GRAY + "" + ChatColor.ITALIC + "/" + name() + " <player> <amount>");
+      return true;
     }
 
     FileConfiguration config = plugin.getConfig();
@@ -53,12 +54,17 @@ public class PayPoints implements CommandExecutor, LCommand {
       return true;
     }
 
-    if (!Functions.isNumber(args[1]) && Integer.parseInt(args[1]) > minPayment) {
+    if (!Functions.isNumber(args[1])) {
+      Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidNumber"));
+      return true;
+    }
+
+    if (Integer.parseInt(args[1]) < minPayment) {
       Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidNumber") + " (min: " + minPayment + ")");
       return true;
     }
 
-    if (!Functions.isNumber(args[1]) && Integer.parseInt(args[1]) < maxPayment) {
+    if (Integer.parseInt(args[1]) > maxPayment) {
       Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidNumber") + " (max: " + maxPayment + ")");
       return true;
     }
