@@ -17,6 +17,13 @@ public class SetAdvsc extends SubCommand implements LCommand {
     return "setAdvsc";
   }
 
+  public String[] subPermissions() {
+    return new String[]{
+      "add", // Добавить то что я не помню [0]
+      "remove" // Отобрать хз что вообще [1]
+    };
+  }
+
   @Override
   public void onCommand(CommandSender sender, @NotNull String[] args) {
     if (!(sender.hasPermission(Functions.permAll()) || sender.hasPermission(Functions.permRoot() + getPermission()))) {
@@ -28,6 +35,28 @@ public class SetAdvsc extends SubCommand implements LCommand {
       Functions.pluginMessage(sender, ChatColor.GRAY + "" + ChatColor.ITALIC + "/" + name() + " <player> <amount>");
       return;
     }
+
+    boolean isAdd = false;
+    boolean isRemove = false;
+
+    if (args[1].charAt(0) == '+') {
+      isAdd = true;
+      if (!(sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + "*")) ||
+        sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + subPermissions()[0])))) {
+        Functions.noPermission(sender);
+        return;
+      }
+    }
+    if (args[1].charAt(0) == '-') {
+      isRemove = true;
+      if (!(sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + "*")) ||
+        sender.hasPermission(Functions.permissionBuilder(Functions.permRoot() + getPermission() + subPermissions()[1])))) {
+        Functions.noPermission(sender);
+        return;
+      }
+    }
+    args[1] = args[1].replaceAll("\\+", "").replaceAll("-", "");
+
     if (!Functions.isNumber(args[1]) || Integer.parseInt(args[1]) < 0) {
       Functions.pluginMessage(sender, ChatColor.RED + Functions.getMessage("invalidNumber"));
       return;
@@ -41,7 +70,16 @@ public class SetAdvsc extends SubCommand implements LCommand {
       return;
     }
     try {
-      Main.sqLite.saveData(player, SQLite.KEY_ADVSC, value);
+      if (!isAdd & !isRemove) {
+        Main.sqLite.saveData(player, SQLite.KEY_ADVSC, value);
+      } else {
+        if (isAdd) {
+          Main.sqLite.saveData(player, SQLite.KEY_ADVSC, Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC) + value);
+        }
+        if (isRemove) {
+          Main.sqLite.saveData(player, SQLite.KEY_ADVSC, Main.sqLite.getDataInt(player, SQLite.KEY_ADVSC) - value);
+        }
+      }
     } catch (Exception e) {
       Functions.pluginMessage(sender, Functions.getMessage("errorOccurred"));
       e.printStackTrace();
